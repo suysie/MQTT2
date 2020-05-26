@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+
+<script src="https://unpkg.com/mqtt@4.0.1/dist/mqtt.min.js"></script>
+<script>
+var client  = mqtt.connect('ws://test.mosquitto.org:8080/ws')
+
+client.on('connect', function () {
+  client.subscribe('presence', function (err) {
+    if (!err) {
+      client.publish('presence', 'stan zijn pc is online')
+    }
+  })
+})
+client.on('message',function(topic, message, packet){
+  if(message.toString() == "the pin is high")
+  {
+    document.getElementById("pinstatus").innerHTML = "de pin is high"
+  }
+  if(message.toString() == "the pin is low")
+  {
+    document.getElementById("pinstatus").innerHTML = "de pin is low";
+  }
+});
+function ledbutton(ledjes)
+        {
+            console.log('test');
+            client.publish('presence', 'testerd')
+        }
+
+</script>
+<!--<a href="/ButtonPage" style="background-color:blue;color:white;padding: 30px 40px; text-align: center; text-decoration: none; display: inline-block;">GPIO</a>
+<a href="/ledsPage" style="background-color:blue;color:white;padding: 30px 40px; text-align: center; text-decoration: none; display: inline-block;">Leds</a>
+<a href="/tempPage" style="background-color:blue;color:white;padding: 30px 40px; text-align: center; text-decoration: none; display: inline-block;">temperatuur</a>-->
+
+<h1>Hello welcom on this page where do you want to go</h1>
+<button id="led" onclick="ledbutton(this)">change pinoutput</button>
+<div id="pinstatus"></div>
+</body>
+</html>
